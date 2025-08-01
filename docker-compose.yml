@@ -1,0 +1,36 @@
+version: '3.5'
+
+services:
+  laravel-app:
+    image: bitnami/laravel:latest
+    container_name: laravel-app
+    ports:
+      - "8000:80"
+    volumes:
+      - .:/app
+    networks:
+      - backend
+    environment:
+      - DB_HOST=mysql-db
+      - DB_DATABASE=laravel
+      - DB_USERNAME=laraveluser
+      - DB_PASSWORD=laravelpassword
+    depends_on:
+      - mysql-db
+
+  mysql-db:
+    image: mysql:5.7
+    container_name: mysql-db
+    ports:
+      - "3306:3306"
+    environment:
+      - MYSQL_ROOT_PASSWORD=securerootpassword
+      - MYSQL_DATABASE=laravel
+      - MYSQL_USER=laraveluser
+      - MYSQL_PASSWORD=laravelpassword
+    networks:
+      - backend
+
+networks:
+  backend:
+    name: backend-network
